@@ -1,0 +1,12 @@
+.form{
+    width: 100%;
+    min-width: 300px;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 40px 15px;
+    border: 1px solid gray;
+    border-radius: 8px;
+
+}
