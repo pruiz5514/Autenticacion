@@ -4,6 +4,7 @@ import email from "next-auth/providers/email"
 import db from "./db"
 import bcrypt from "bcryptjs"
 import { redirect } from "next/dist/server/api-utils"
+import { nanoid } from "nanoid"
 
 
 // Notice this is only an object, not a full Auth.js instance
@@ -35,6 +36,35 @@ export default {
                 if (!isValid) {
                     throw new Error("Incorrect password")
                 }
+
+                // if (!user.emailVerified) {
+                //     const verifyTokenExist = await db.verificationToken.findFirst({
+                //         where: {
+                //             identifier: user.email
+                //         }
+                //     })
+
+                //     if (verifyTokenExist?.identifier) {
+                //         await db.verificationToken.delete({
+                //             where: {
+                //                 identifier: user.email
+                //             }
+                //         })
+                //     }
+
+                //     const token = nanoid();
+
+                //     await db.verificationToken.create({
+                //         data: {
+                //             identifier: user.email,
+                //             token,
+                //             expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+                //         }
+                //     })
+                // }
+
+
+
                 return user
             },
         }),
