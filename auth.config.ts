@@ -17,13 +17,16 @@ export default {
                 password: {},
             },
             authorize: async (credentials) => {
+                console.log(credentials);
                 const user = await db.user.findUnique({
                     where: {
                         email: credentials.email as string
                     }
                 })
 
-                if (!user || user.password) {
+                console.log(user);
+
+                if (!user || !user.password) {
                     throw new Error("No user found")
                 }
 

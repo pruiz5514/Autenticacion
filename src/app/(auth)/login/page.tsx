@@ -25,8 +25,12 @@ const Login = () => {
       redirect: false
     };
 
+    console.log(user);
+    
     try{
       const response = await signIn("credentials", user);
+      console.log(response);
+      
       if(!response?.error){
         router.push("/dashboard")
       };
