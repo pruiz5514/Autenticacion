@@ -7,8 +7,12 @@ import { get } from "http"
 import { AuthError } from "next-auth";
 import { signIn } from "next-auth/react"
 import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
+
 
 const Login = () => {
+  const router = useRouter();
+
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) =>{
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -22,7 +26,13 @@ const Login = () => {
     };
 
     try{
-      await signIn("credentials", user)
+      const response = await signIn("credentials", user);
+      if(!response?.error){
+        router.push("/dashboard")
+      };
+
+      event.currentTarget.reset()
+      
     }catch (error){
       if(error instanceof AuthError){
         return{error: error.cause?.err?.message}

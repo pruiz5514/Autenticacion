@@ -1,5 +1,9 @@
 import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
+import email from "next-auth/providers/email"
+import db from "./db"
+import bcrypt from "bcryptjs"
+import { redirect } from "next/dist/server/api-utils"
 
 
 // Notice this is only an object, not a full Auth.js instance
@@ -13,16 +17,22 @@ export default {
                 password: {},
             },
             authorize: async (credentials) => {
-                console.log({ credentials });
-                if (credentials.email !== "test@test.com") {
-                    throw new Error("Invalid credential")
+                const user = await db.user.findUnique({
+                    where: {
+                        email: credentials.email as string
+                    }
+                })
+
+                if (!user || user.password) {
+                    throw new Error("No user found")
                 }
 
-                return {
-                    id: '1',
-                    name: 'Test User',
-                    email: 'test@test.com'
+                const isValid = await bcrypt.compare(credentials.password as string, user.password as string)
+
+                if (!isValid) {
+                    throw new Error("Incorrect password")
                 }
+                return user
             },
         }),
     ],
